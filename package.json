@@ -42,5 +42,8 @@
     "commitizen": {
       "path": "node_modules/cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "joi": "10.2.1"
   }
 }

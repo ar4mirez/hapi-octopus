@@ -26,7 +26,20 @@ Lab.describe(`${Lab.pkg.name}:utils`, () => {
         return done();
     });
 
-    Lab.it('should use fail if not cwd were passed.', (done) => {
+    Lab.it('should return an empty array if not files were found.', (done) => {
+
+        const files = Utils.loadFilesFromDir('*.js');
+
+        Lab.expect(files).to.exist();
+        Lab.expect(files).to.be.an.array();
+        Lab.expect(files).to.have.length(0);
+
+        return done();
+    });
+
+    Lab.it('should fail if an invalid cwd option were passed.', (done) => {
+
+        Lab.expect(() => Utils.loadFilesFromDir('*.js', { cwd: 123 })).to.throw(Error);
 
         return done();
     });
