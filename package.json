@@ -1,14 +1,17 @@
 {
   "name": "hapi-octopus",
-  "version": "0.0.1-semantically-released",
+  "version": "0.0.0-semantically-released",
   "description": "HAPI plugin to auto-load routes, methods, pres, handlers and more.",
   "main": "./lib/index.js",
   "scripts": {
-    "test": "lab"
+    "test": "lab -a code -c -C -l -L -S -t 100",
+    "test:cov": "lab -r html -o .coverage/coverage.html -r lcov -o .coverage/lcov.info",
+    "commit": "git-cz",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/ar4mirez/hapi-octopus.git"
+    "url": "https://github.com/ar4mirez/hapi-octopus.git"
   },
   "keywords": [
     "hapijs",
@@ -25,9 +28,19 @@
   },
   "homepage": "https://github.com/ar4mirez/hapi-octopus#readme",
   "devDependencies": {
+    "code": "4.0.0",
+    "commitizen": "2.9.5",
+    "cz-conventional-changelog": "1.2.0",
     "eslint": "^3.15.0",
     "eslint-config-hapi": "^10.0.0",
     "eslint-plugin-hapi": "^4.0.0",
-    "fixpack": "^2.3.1"
+    "fixpack": "^2.3.1",
+    "lab": "12.1.0",
+    "semantic-release": "^6.3.2"
+  },
+  "config": {
+      "commitizen": {
+          "path": "node_modules/cz-conventional-changelog"
+      }
   }
 }

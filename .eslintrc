@@ -1,6 +1,6 @@
 {
   "extends": "hapi",
   "plugins": [
-    "plugin-hapi"
+    "hapi"
   ]
 }
