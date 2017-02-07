@@ -1,49 +1,69 @@
 {
   "name": "hapi-octopus",
-  "version": "0.0.0-semantically-released",
   "description": "HAPI plugin to auto-load routes, methods, pres, handlers and more.",
-  "main": "./lib/index.js",
-  "scripts": {
-    "test": "lab -a code -c -C -l -L -S -t 100",
-    "test:cov": "lab -r html -o .coverage/coverage.html -r lcov -o .coverage/lcov.info",
-    "commit": "git-cz",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ar4mirez/hapi-octopus.git"
-  },
-  "keywords": [
-    "hapijs",
-    "plugin",
-    "routes",
-    "handlers",
-    "pres",
-    "methods"
-  ],
+  "version": "0.0.0-semantically-released",
   "author": "Angel Ramirez <angel@cuemby.com>",
-  "license": "SEE LICENSE IN <LICENSE.md>",
   "bugs": {
     "url": "https://github.com/ar4mirez/hapi-octopus/issues"
   },
-  "homepage": "https://github.com/ar4mirez/hapi-octopus#readme",
+  "config": {
+    "ghooks": {
+      "pre-commit": "npm run validate"
+    },
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    }
+  },
+  "dependencies": {
+    "async": "^2.1.4",
+    "glob": "^7.1.1",
+    "joi": "10.2.1"
+  },
   "devDependencies": {
     "code": "4.0.0",
+    "codecov": "^1.0.1",
     "commitizen": "2.9.5",
     "cz-conventional-changelog": "1.2.0",
     "eslint": "^3.15.0",
     "eslint-config-hapi": "^10.0.0",
     "eslint-plugin-hapi": "^4.0.0",
     "fixpack": "^2.3.1",
+    "ghooks": "^2.0.0",
     "lab": "12.1.0",
+    "npm-run-all": "^4.0.1",
+    "rimraf": "^2.5.4",
     "semantic-release": "6.3.2"
   },
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-conventional-changelog"
-    }
+  "files": [
+    "lib",
+    "README.md"
+  ],
+  "homepage": "https://github.com/ar4mirez/hapi-octopus#readme",
+  "keywords": [
+    "handlers",
+    "hapijs",
+    "methods",
+    "plugin",
+    "pres",
+    "routes"
+  ],
+  "license": "SEE LICENSE IN <LICENSE.md>",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ar4mirez/hapi-octopus.git"
   },
-  "dependencies": {
-    "joi": "10.2.1"
+  "scripts": {
+    "build": "npm-run-all --parallel build:*",
+    "build:main": "babel --copy-files --out-dir dist lib",
+    "commit": "git-cz",
+    "coverage": "lab -r lcov -o coverage/lcov.info && npm t",
+    "coverage:check": "lab -t 100",
+    "coverage:report": "lab -r lcov | codecov",
+    "prebuild": "rimraf dist",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "setup": "npm install && npm run validate",
+    "test": "lab -c -C -L -S -t 100 -a code",
+    "validate": "npm run coverage && npm run coverage:check"
   }
 }

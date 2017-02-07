@@ -11,9 +11,12 @@ node_js:
 before_script:
   - npm prune
 after_success:
+  - npm run coverage:report
   - npm run semantic-release
 script:
-  - npm run test
+  - npm run coverage
+  - npm run coverage:check
+  - npm run build
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
