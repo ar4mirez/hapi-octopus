@@ -25,4 +25,9 @@ Lab.describe(`${Lab.pkg.name}:utils`, () => {
 
         return done();
     });
+
+    Lab.it('should use fail if not cwd were passed.', (done) => {
+
+        return done();
+    });
 });
