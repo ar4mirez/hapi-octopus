@@ -30,8 +30,6 @@
     "fixpack": "^2.3.1",
     "ghooks": "^2.0.0",
     "lab": "12.1.0",
-    "npm-run-all": "^4.0.1",
-    "rimraf": "^2.5.4",
     "semantic-release": "6.3.2"
   },
   "files": [
@@ -54,8 +52,6 @@
     "url": "https://github.com/ar4mirez/hapi-octopus.git"
   },
   "scripts": {
-    "build": "npm-run-all --parallel build:*",
-    "build:main": "babel --copy-files --out-dir dist lib",
     "commit": "git-cz",
     "coverage": "lab -r lcov -o coverage/lcov.info && npm t",
     "coverage:check": "lab -t 100",

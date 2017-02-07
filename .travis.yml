@@ -16,7 +16,6 @@ after_success:
 script:
   - npm run coverage
   - npm run coverage:check
-  - npm run build
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
