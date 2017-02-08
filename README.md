@@ -11,4 +11,14 @@ HAPI plugin to auto-load routes, methods, pres, handlers and more.
 
 ## Installation
 
+```
+npm i --save hapi-octopus
+```
+
 ## Usage
+
+```
+const octopus = require('hapi-octopus');
+
+server.register(octopus, (error) => {});
+```

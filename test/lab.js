@@ -1,8 +1,6 @@
-'use strict';
-
-const Code = require('code');
+const code = require('code');
 const Lab = require('lab');
-const Pkg = require('../package.json');
+const pkg = require('../package.json');
 
 const lab = exports.lab = Lab.script();
 
@@ -13,6 +11,6 @@ exports.beforeEach = lab.beforeEach;
 exports.after = lab.after;
 exports.afterEach = lab.afterEach;
 
-exports.expect = Code.expect;
+exports.expect = code.expect;
 
-exports.pkg = Pkg;
+exports.pkg = pkg;
