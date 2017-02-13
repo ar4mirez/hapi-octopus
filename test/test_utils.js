@@ -1,5 +1,10 @@
-const {describe, it, expect, pkg} = require('./lab');
+const lab = require('./lab');
 const utils = require('../lib/utils');
+
+const describe = lab.describe;
+const it = lab.it;
+const expect = lab.expect;
+const pkg = lab.pkg;
 
 describe(`${pkg.name}:utils`, () => {
   describe('utils:#loadFilesFromDir', () => {

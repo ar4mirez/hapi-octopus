@@ -1,6 +1,12 @@
-const {describe, it, expect, pkg, beforeEach} = require('./lab');
+const lab = require('./lab');
 const plugin = require('../lib');
 const hapi = require('hapi');
+
+const describe = lab.describe;
+const it = lab.it;
+const expect = lab.expect;
+const pkg = lab.pkg;
+const beforeEach = lab.beforeEach;
 
 describe(`${pkg.name}:plugin`, () => {
   let server;
