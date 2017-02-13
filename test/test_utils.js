@@ -51,13 +51,4 @@ describe(`${pkg.name}:utils`, () => {
       });
     });
   });
-
-  describe('utils:#registerMethods', () => {
-    it('should #registerMethods function exists.', done => {
-      expect(utils.registerMethods).to.exist();
-      expect(utils.registerMethods).to.be.a.function();
-
-      return done();
-    });
-  });
 });
