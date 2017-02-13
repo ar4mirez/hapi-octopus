@@ -47,7 +47,7 @@
     "routes"
   ],
   "license": "SEE LICENSE IN <LICENSE.md>",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/ar4mirez/hapi-octopus.git"
