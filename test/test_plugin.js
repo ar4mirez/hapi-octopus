@@ -1,3 +1,5 @@
+'use strict';
+
 const lab = require('./lab');
 const plugin = require('../lib');
 const hapi = require('hapi');

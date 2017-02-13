@@ -1,3 +1,5 @@
+'use strict';
+
 const lab = require('./lab');
 const utils = require('../lib/utils');
 
