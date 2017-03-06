@@ -151,16 +151,20 @@ Routes can be registered in 2 ways: exporting an array|object or using a functio
 `routes: array|object`: required for this signature should return an array or object of hapijs [routes](https://hapijs.com/api#serverrouteoptions).
 
 ```javascript
-exports.customers = [
-  {method: 'GET', path: '/customers', handler: {customerAll: {}}},
-  {method: 'POST', path: '/customers', handler: {customerCreate: {}}}
-]
+exports.customers = {
+  routes: [
+    {method: 'GET', path: '/customers', handler: {customerAll: {}}},
+    {method: 'POST', path: '/customers', handler: {customerCreate: {}}}
+  ]
+}
 
 exports.update = {
-  method: 'PATCH',
-  path: '/customers/{id}',
-  handler: {
-    customerUpdate: {}
+  routes: {
+    method: 'PATCH',
+    path: '/customers/{id}',
+    handler: {
+      customerUpdate: {}
+    }
   }
 }
 ```
