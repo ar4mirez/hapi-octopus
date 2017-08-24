@@ -1,4 +1,4 @@
-# hapi-octopus
+# hapi-octopus v2.0
 
 [![travis build](https://img.shields.io/travis/ar4mirez/hapi-octopus.svg?style=flat-square)](https://travis-ci.org/ar4mirez/hapi-octopus)
 [![codecov coverage](https://img.shields.io/codecov/c/github/ar4mirez/hapi-octopus.svg?style=flat-square)](https://codecov.io/github/ar4mirez/hapi-octopus)
