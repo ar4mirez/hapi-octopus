@@ -1,7 +1,7 @@
 language: node_js
 cache:
   directories:
-    - node_modules
+    - ~/.npm
 notifications:
   email: true
 node_js:
@@ -11,10 +11,9 @@ before_script:
   - npm prune
 after_success:
   - npm run coverage:report
-  - npm run semantic-release
+  - npm run travis-deploy-once "npm run semantic-release"
 script:
-  - npm run coverage
-  - npm run coverage:check
+  - npm run validate
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/

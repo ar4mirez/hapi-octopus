@@ -1,7 +1,7 @@
 {
   "name": "hapi-octopus",
   "description": "HAPI plugin to auto-load routes, methods, pres, handlers and more.",
-  "version": "0.0.0-semantically-released",
+  "version": "0.0.0-development",
   "author": "Angel Ramirez <angel@cuemby.com>",
   "bugs": {
     "url": "https://github.com/ar4mirez/hapi-octopus/issues"
@@ -30,7 +30,8 @@
     "ghooks": "^2.0.2",
     "hapi": "^17.2.0",
     "lab": "^15.2.1",
-    "semantic-release": "^12.4.1"
+    "semantic-release": "^12.4.1",
+    "travis-deploy-once": "^4.3.4"
   },
   "engines": {
     "node": ">=8.9.0"
@@ -60,9 +61,10 @@
     "coverage:check": "lab -t 100",
     "coverage:report": "lab -r lcov | codecov",
     "prebuild": "rimraf dist",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "semantic-release": "semantic-release",
     "setup": "npm install && npm run validate",
     "test": "lab -c -C -L -S -t 100 -a code",
-    "validate": "npm run coverage && npm run coverage:check"
+    "validate": "npm run coverage && npm run coverage:check",
+    "travis-deploy-once": "travis-deploy-once"
   }
 }
