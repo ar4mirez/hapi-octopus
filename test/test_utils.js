@@ -8,54 +8,50 @@ const it = lab.it;
 const expect = lab.expect;
 const pkg = lab.pkg;
 
-describe(`${pkg.name}:utils`, () => {
-  describe('utils:#loadFilesFromDir', () => {
-    it('should #loadFilesFromDir function exist.', done => {
+describe(`${pkg.name}:utils`, async () => {
+  describe('utils:#loadFilesFromDir', async () => {
+    it('should #loadFilesFromDir function exist.', async () => {
       expect(utils.loadFilesFromDir).to.exist();
       expect(utils.loadFilesFromDir).to.be.a.function();
-
-      return done();
     });
 
-    it('should load files from a folder.', done => {
+    it('should load files from a folder.', async () => {
       const options = {cwd: `${__dirname}/artifacts/routes`};
-      utils.loadFilesFromDir('*.js', options, (error, data) => {
-        expect(data.files).to.exist();
-        expect(data.files).to.be.an.array();
-        expect(data.files).to.have.length(2);
-
-        return done();
-      });
+      const data = await utils.loadFilesFromDir('*.js', options);
+      expect(data.files).to.exist();
+      expect(data.files).to.be.an.array();
+      expect(data.files).to.have.length(2);
     });
 
-    it('should return an empty array if not files were found.', done => {
-      utils.loadFilesFromDir('*.js', {cwd: '/'}, (error, data) => {
-        expect(data.files).to.exist();
-        expect(data.files).to.be.an.array();
-        expect(data.files).to.have.length(0);
-
-        return done();
-      });
+    it('should return an empty array if not files were found.', async () => {
+      const data = await utils.loadFilesFromDir('*.js', {cwd: '/'});
+      expect(data.files).to.exist();
+      expect(data.files).to.be.an.array();
+      expect(data.files).to.have.length(0);
     });
 
-    it('should fail if an invalid cwd option were passed.', done => {
-      utils.loadFilesFromDir('*.js', {cwd: 123}, error => {
-        expect(error).to.exist();
-        expect(error).to.be.an.instanceof(Error);
+    it('should fail if an invalid cwd option were passed.', async () => {
+      let error;
 
-        return done();
-      });
+      try {
+        await utils.loadFilesFromDir('*.js', {cwd: 123});
+      } catch (e) {
+        error = e;
+      }
+
+      expect(error).to.exist();
+      expect(error).to.be.an.instanceof(Error);
     });
 
-    it('should fail if cwd is not a directory.', done => {
+    it('should fail if cwd is not a directory.', async () => {
       const options = {cwd: `${__dirname}/artifacts/routes/single_route.js`};
 
-      utils.loadFilesFromDir('*.js', options, error => {
+      try {
+        await utils.loadFilesFromDir('*.js', options);
+      } catch (error) {
         expect(error).to.exist();
         expect(error).to.be.an.instanceof(Error);
-
-        return done();
-      });
+      }
     });
   });
 });

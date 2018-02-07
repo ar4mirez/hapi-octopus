@@ -3,8 +3,8 @@ const internals = {};
 exports.status = {
   method: (route, options) => {
     if (!options.action) {
-      return (request, reply) => {
-        return reply({handler: 'status', options: options});
+      return async (request, h) => {
+        return h.response({handler: 'status', options: options});
       };
     }
 
@@ -12,20 +12,21 @@ exports.status = {
   }
 };
 
-internals.ping = exports.ping = {
+exports.ping = {
   name: 'ping',
   method: (route, options) => {
-    return (request, reply) => {
-      return reply({ping: true, options: options});
+    return async (request, h) => {
+      return h.response({ping: true, options: options});
     };
   }
 };
+internals.ping = exports.ping;
 
-internals.pong = exports.pong = {
+exports.pong = {
   method: (route, options) => {
-    return (request, reply) => {
-      return reply({pong: true, options: options});
+    return async (request, h) => {
+      return h.response({pong: true, options: options});
     };
   }
 };
-
+internals.pong = exports.pong;

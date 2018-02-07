@@ -2,7 +2,8 @@ const code = require('code');
 const Lab = require('lab');
 const pkg = require('../package.json');
 
-const lab = exports.lab = Lab.script();
+exports.lab = Lab.script();
+const lab = exports.lab;
 
 exports.describe = lab.describe;
 exports.it = lab.it;

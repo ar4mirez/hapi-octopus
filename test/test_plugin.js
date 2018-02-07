@@ -10,7 +10,7 @@ const expect = lab.expect;
 const pkg = lab.pkg;
 const beforeEach = lab.beforeEach;
 
-describe(`${pkg.name}:plugin`, () => {
+describe(`${pkg.name}:plugin`, async () => {
   let server;
 
   const options = {
@@ -28,93 +28,86 @@ describe(`${pkg.name}:plugin`, () => {
     }
   };
 
-  beforeEach(done => {
-    server = new hapi.Server();
-    server.connection({host: 'localhost', port: 80});
-
-    return done();
+  beforeEach(async () => {
+    server = new hapi.Server({host: 'localhost', port: 80});
   });
 
-  function register(options, callback) {
-    return server.register({
-      register: plugin,
+  async function register(options) {
+    await server.register({
+      plugin: plugin,
       options: options
-    }, callback);
+    });
   }
 
-  it('should successfully load methods.', done => {
-    register({methods: options.methods}, () => {
-      expect(server.methods).to.include(['namespaceA']);
-      expect(server.methods.namespaceA).to.include(['multiply']);
-      expect(server.methods.namespaceA.multiply).to.be.a.function();
-
-      return done();
-    });
+  it('should successfully load methods.', async () => {
+    await register({methods: options.methods});
+    expect(server.methods).to.include(['namespaceA']);
+    expect(server.methods.namespaceA).to.include(['multiply']);
+    expect(server.methods.namespaceA.multiply).to.be.a.function();
   });
 
-  it('should successfully load handlers.', done => {
-    register({handlers: options.handlers}, () => {
-      server.route({
-        method: 'GET',
-        path: '/status/ping',
-        handler: {
-          handlerAStatus: {
-            action: 'ping'
-          }
+  it('should successfully load handlers.', async () => {
+    await register({handlers: options.handlers});
+
+    server.route({
+      method: 'GET',
+      path: '/status/ping',
+      handler: {
+        handlerAStatus: {
+          action: 'ping'
+        }
+      }
+    });
+
+    const response = await server.inject({method: 'GET', url: '/status/ping'});
+    expect(response.statusCode).to.be.equal(200);
+    expect(response.result.ping).to.be.true();
+  });
+
+  it('should successfully load routes.', async () => {
+    await register({routes: options.routes});
+
+    const response = await server.inject({method: 'GET', url: '/status'});
+    expect(response.statusCode).to.be.equal(200);
+    expect(response.result).to.be.equal({route: 'status'});
+  });
+
+  it('should successfully load decorators.', async () => {
+    await register({decorators: options.decorators});
+    expect(server).to.include(['dbConnection']);
+    expect(server.dbConnection).to.be.a.function();
+    expect(server.dbConnection()).to.be.equal({connected: true});
+  });
+
+  it('should successfully register plugin.', async () => {
+    let error;
+
+    try {
+      await server.register({
+        plugin: plugin,
+        options: options
+      });
+    } catch (e) {
+      error = e;
+    }
+
+    expect(error).to.not.exist();
+    expect(server.registrations).to.include(pkg.name);
+  });
+
+  it('should fail if a file is passed instead of directory.', async () => {
+    let error;
+
+    try {
+      await register({
+        methods: {
+          cwd: `${options.methods.cwd}/namespace_a.js`
         }
       });
+    } catch (e) {
+      error = e;
+    }
 
-      server.inject({method: 'GET', url: '/status/ping'}, response => {
-        expect(response.statusCode).to.be.equal(200);
-        expect(response.result.ping).to.be.true();
-
-        return done();
-      });
-    });
-  });
-
-  it('should successfully load routes.', done => {
-    register({routes: options.routes}, () => {
-      server.inject({method: 'GET', url: '/status'}, response => {
-        expect(response.statusCode).to.be.equal(200);
-        expect(response.result).to.be.equal({route: 'status'});
-
-        return done();
-      });
-    });
-  });
-
-  it('should successfully load decorators.', done => {
-    register({decorators: options.decorators}, () => {
-      expect(server).to.include(['dbConnection']);
-      expect(server.dbConnection).to.be.a.function();
-      expect(server.dbConnection()).to.be.equal({connected: true});
-
-      return done();
-    });
-  });
-
-  it('should successfully register plugin.', done => {
-    server.register({
-      register: plugin,
-      options: options
-    }, error => {
-      expect(error).to.not.exist();
-      expect(server.registrations).to.include(pkg.name);
-
-      return done();
-    });
-  });
-
-  it('should fail if a file is passed instead of directory.', done => {
-    register({
-      methods: {
-        cwd: `${options.methods.cwd}/namespace_a.js`
-      }
-    }, error => {
-      expect(error).to.exist();
-
-      return done();
-    });
+    expect(error).to.exist();
   });
 });

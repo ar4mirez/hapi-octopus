@@ -3,8 +3,8 @@ exports.ping = {
     {
       method: 'GET',
       path: '/ping',
-      handler: (request, reply) => {
-        return reply({route: 'ping'});
+      handler: async (request, h) => {
+        return h.response({route: 'ping'});
       }
     }
   ]
