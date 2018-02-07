@@ -7,6 +7,8 @@
 [![SEE LINCESE](https://img.shields.io/npm/l/hapi-octopus.svg?style=flat-square)](https://github.com/ar4mirez/hapi-octopus/blob/master/LICENSE.md)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)](https://github.com/semantic-release/semantic-release)
 
+***hapi v17 version***
+
 A multi-purpose plugin that allows you to autoload `methods`, `handlers`,
 `routes` and `decorators` using a simple signature convention.
 
@@ -26,8 +28,8 @@ npm i --save hapi-octopus
 const octopus = require('hapi-octopus');
 
 // using server register.
-server.register({
-  register: octopus,
+await server.register({
+  plugin: octopus,
   options: {
     methods: {
       cwd: `${process.cwd()}/methods`
@@ -42,7 +44,7 @@ server.register({
       cwd: `${process.cwd()}/decorators`
     }
   }
-}, (error) => {});
+}});
 
 // using manifest.
 {
@@ -114,12 +116,12 @@ exports.mulitply = {
 
 exports.all = {
   method: (route, options) => {
-    return (request, reply) => {
+    return (request, h) => {
       ...
-      return reply({
+      return {
         total: 10,
         data: customers
-      });
+      })
     }
   }
 };
@@ -189,7 +191,7 @@ exports.customers = {
 
 ### Register decorators.
 
-`decorate: string`: required and accept only `request|reply|server`.
+`decorate: string`: required and accept only `request|toolkit|server`.
 
 `name: string`: optional name must be unique since will be used as accessor
 from decoration, if name is not passed `exports.key` will be used instead.
@@ -200,7 +202,7 @@ see more info about [decorators](https://hapijs.com/api#serverdecoratetype-prope
 
 ````javascript
 exports.reply404 = {
-  decorate: 'reply',
+  decorate: 'toolkit',
   method: () => {
     return this.response({
       message: 'Standard 404 error'
@@ -211,8 +213,8 @@ exports.reply404 = {
 // will be accesible from a handler like:
 
 ...
-handler: (request, reply) => {
-  return reply.reply404({anotherMessage: 'ahh whatever really.'});
+handler: (request, h) => {
+  return h.response(({anotherMessage: 'ahh whatever really.'}).code(404);
 }
 
 ````
