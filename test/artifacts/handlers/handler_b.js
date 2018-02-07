@@ -1,7 +1,7 @@
 exports.main = {
   method: (route, options) => {
-    return (request, reply) => {
-      return reply({handler: 'main', options: options});
+    return async (request, h) => {
+      return h.response({handler: 'main', options: options});
     };
   }
 };

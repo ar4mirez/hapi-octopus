@@ -1,5 +1,5 @@
 exports.reply404 = {
-  decorate: 'reply',
+  decorate: 'toolkit',
   method: function () {
     return this.response({
       message: 'Standard 404 Error.'
