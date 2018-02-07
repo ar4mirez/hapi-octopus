@@ -413,3 +413,5 @@ build
 /*.gcno
 
 # End of https://www.gitignore.io/api/windows,macos,linux,webstorm,phpstorm,jetbrains,visualstudiocode,sublimetext,node,dreamweaver,emacs,vim,xcode,eclipse,netbeans
+
+.nvmrc

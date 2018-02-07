@@ -32,6 +32,9 @@
     "lab": "^15.2.1",
     "semantic-release": "^12.4.1"
   },
+  "engines": {
+    "node": ">=8.9.0"
+  },
   "files": [
     "lib",
     "README.md"
