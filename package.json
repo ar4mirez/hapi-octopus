@@ -1,70 +1,27 @@
 {
-  "name": "hapi-octopus",
+  "name": "@ar4mirez/hapi-octopus",
   "description": "HAPI plugin to auto-load routes, methods, pres, handlers and more.",
-  "version": "0.0.0-development",
+  "version": "1.0.0",
   "author": "Angel Ramirez <angel@cuemby.com>",
+  "main": "lib/index.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "bugs": {
     "url": "https://github.com/ar4mirez/hapi-octopus/issues"
   },
-  "config": {
-    "ghooks": {
-      "pre-commit": "npm run validate"
-    },
-    "commitizen": {
-      "path": "node_modules/cz-conventional-changelog"
-    }
-  },
+  "homepage": "https://github.com/ar4mirez/hapi-octopus#readme",
+  "license": "ISC",
   "dependencies": {
-    "glob": "^7.1.2",
-    "joi": "^13.1.1",
-    "lodash": "^4.17.4"
+    "glob": "^10.4.5",
+    "joi": "^17.13.3"
   },
   "devDependencies": {
-    "code": "^5.1.2",
-    "codecov": "^3.0.0",
-    "commitizen": "^2.9.6",
-    "cz-conventional-changelog": "^2.1.0",
-    "eslint": "^4.16.0",
-    "eslint-config-xo-space": "^0.17.0",
-    "fixpack": "^2.3.1",
-    "ghooks": "^2.0.2",
-    "hapi": "^17.2.0",
-    "lab": "^15.2.1",
-    "semantic-release": "^12.4.1",
-    "travis-deploy-once": "^4.3.4"
-  },
-  "engines": {
-    "node": ">=8.9.0"
-  },
-  "files": [
-    "lib",
-    "README.md"
-  ],
-  "homepage": "https://github.com/ar4mirez/hapi-octopus#readme",
-  "keywords": [
-    "handlers",
-    "hapijs",
-    "methods",
-    "plugin",
-    "pres",
-    "routes"
-  ],
-  "license": "SEE LICENSE IN <LICENSE.md>",
-  "main": "lib/index.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ar4mirez/hapi-octopus.git"
+    "@hapi/code": "^9.0.3",
+    "@hapi/hapi": "^21.4.4",
+    "@hapi/lab": "^26.0.0"
   },
   "scripts": {
-    "commit": "git-cz",
-    "coverage": "lab -r lcov -o coverage/lcov.info && npm t",
-    "coverage:check": "lab -t 100",
-    "coverage:report": "lab -r lcov | codecov",
-    "prebuild": "rimraf dist",
-    "semantic-release": "semantic-release",
-    "setup": "npm install && npm run validate",
-    "test": "lab -c -C -L -S -t 100 -a code",
-    "validate": "npm run coverage && npm run coverage:check",
-    "travis-deploy-once": "travis-deploy-once"
+    "test": "lab -v -c"
   }
 }
