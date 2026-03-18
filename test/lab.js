@@ -1,5 +1,7 @@
-const code = require('code');
-const Lab = require('lab');
+'use strict';
+
+const Code = require('@hapi/code');
+const Lab = require('@hapi/lab');
 const pkg = require('../package.json');
 
 exports.lab = Lab.script();
@@ -12,6 +14,6 @@ exports.beforeEach = lab.beforeEach;
 exports.after = lab.after;
 exports.afterEach = lab.afterEach;
 
-exports.expect = code.expect;
+exports.expect = Code.expect;
 
 exports.pkg = pkg;
