@@ -1,7 +1,7 @@
 {
   "name": "@ar4mirez/hapi-octopus",
   "description": "HAPI plugin to auto-load routes, methods, pres, handlers and more.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Angel Ramirez <angel@cuemby.com>",
   "main": "lib/index.js",
   "engines": {
