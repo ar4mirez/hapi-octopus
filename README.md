@@ -1,220 +1,134 @@
 # hapi-octopus
 
-[![travis build](https://img.shields.io/travis/ar4mirez/hapi-octopus.svg?style=flat-square)](https://travis-ci.org/ar4mirez/hapi-octopus)
-[![codecov coverage](https://img.shields.io/codecov/c/github/ar4mirez/hapi-octopus.svg?style=flat-square)](https://codecov.io/github/ar4mirez/hapi-octopus)
-[![version](https://img.shields.io/npm/v/hapi-octopus.svg?style=flat-square)](http://npm.im/hapi-octopus)
-[![downloads](https://img.shields.io/npm/dm/hapi-octopus.svg?style=flat-square)](http://npm-stat.com/charts.html?package=hapi-octopus&from=2015-08-01)
-[![SEE LINCESE](https://img.shields.io/npm/l/hapi-octopus.svg?style=flat-square)](https://github.com/ar4mirez/hapi-octopus/blob/master/LICENSE.md)
-[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)](https://github.com/semantic-release/semantic-release)
+[![npm version](https://img.shields.io/npm/v/@ar4mirez/hapi-octopus.svg)](https://www.npmjs.com/package/@ar4mirez/hapi-octopus)
+[![CI](https://github.com/ar4mirez/hapi-octopus/actions/workflows/ci.yml/badge.svg)](https://github.com/ar4mirez/hapi-octopus/actions)
+[![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
 
-***hapi v17 version***
+Auto-load routes, methods, handlers, and decorators from directories using glob patterns.
 
-A multi-purpose plugin that allows you to autoload `methods`, `handlers`,
-`routes` and `decorators` using a simple signature convention.
+## Requirements
 
-***Is currently in a sort of stable version. I'm trying to keep it with 100% coverage
-but just be aware the API might change a little based on my needs or beacuse I love
-refactoring :p. Any help is apreciated if you are nice and polite.***
+- Node.js >= 18
+- `@hapi/hapi` ^21
 
 ## Installation
 
-```javascript
-npm i --save hapi-octopus
+```bash
+npm install @ar4mirez/hapi-octopus
 ```
 
 ## Usage
 
-```javascript
-const octopus = require('hapi-octopus');
+```js
+const Hapi = require('@hapi/hapi');
 
-// using server register.
-await server.register({
-  plugin: octopus,
-  options: {
-    methods: {
-      cwd: `${process.cwd()}/methods`
-    },
-    handlers: {
-      cwd: `${process.cwd()}/handlers`
-    },
-    routes: {
-      cwd: `${process.cwd()}/routes`
-    },
-    decorators: {
-      cwd: `${process.cwd()}/decorators`
+const init = async () => {
+  const server = new Hapi.Server({ host: 'localhost', port: 3000 });
+
+  await server.register({
+    plugin: require('@ar4mirez/hapi-octopus'),
+    options: {
+      methods:    { cwd: `${process.cwd()}/lib/methods` },
+      handlers:   { cwd: `${process.cwd()}/lib/handlers` },
+      routes:     { cwd: `${process.cwd()}/lib/routes` },
+      decorators: { cwd: `${process.cwd()}/lib/decorators` }
     }
-  }
-}});
+  });
 
-// using manifest.
-{
-  ...
-  registration: [
-    {
-      plugin: octopus,
-      options: {
-        methods: {
-          cwd: `${process.cwd()}/methods`
-        },
-        handlers: {
-          cwd: `${process.cwd()}/handlers`
-        },
-        routes: {
-          cwd: `${process.cwd()}/routes`
-        },
-        decorators: {
-          cwd: `${process.cwd()}/decorators`
-        }
-      }
-    }
-  ]
-}
-```
-
-### Register methods.
-
-#### Signature
-`name: string`: optional if not present export.key will be used instead. ex: `exports.multiply`
-
-`method: function`: required body of method in hapijs. [methods](https://hapijs.com/api#servermethodmethods)
-
-`options: object`: optional same in hapijs. [methods](https://hapijs.com/api#servermethodname-method-options)
-
-`prefix: string`: optional if not present filename will be used instead. ex: `math.js`.
-
-```javascript
-
-// /path/to/methods/math.js
-
-exports.mulitply = {
-  method: (a, b) => (a * b),
-  options: {},
-};
-/*
-  this method will be available as:
-    - server.methods.math.multiply(2, 4);
-  optional values prefix and name are the same as saying
-    - prefix = 'math'
-    - name = 'multiply'
-*/
-
-```
-
-### Register handlers.
-
-#### Signature
-`name: string`: optional if not present export.key will be used instead. ex: `exports.multiply`
-
-`method: function`: required see in hapijs. [handlers](https://hapijs.com/api#serverhandlername-method)
-
-`options: object`: optional same in hapijs. [handlers](https://hapijs.com/api#serverhandlername-method)
-
-`prefix: string`: optional if not present filename will be used instead. ex: `math.js`.
-
-```javascript
-// /path/to/handlers/customer.js
-
-exports.all = {
-  method: (route, options) => {
-    return (request, h) => {
-      ...
-      return {
-        total: 10,
-        data: customers
-      })
-    }
-  }
+  await server.start();
+  console.log(`Server running at: ${server.info.uri}`);
 };
 
-/*
-  this method will be available as:
-    - server.methods.math.multiply(2, 4);
-  optional values prefix and name are the same as saying
-    - prefix = 'customer'
-    - name = 'all'
-*/
-
-// in a route you can use it like this.
-
-server.route({
-  method: 'GET',
-  path: '/customer/create',
-  handler: {
-    customerAll: {} // always prefix+name camelCase.
-  }
-})
+init();
 ```
 
-### Register routes.
+## API / Options
 
-Routes can be registered in 2 ways: exporting an array|object or using a function.
+Each top-level key (`methods`, `handlers`, `routes`, `decorators`) is optional and accepts the following configuration:
 
-#### Array| Object Signature
-`routes: array|object`: required for this signature should return an array or object of hapijs [routes](https://hapijs.com/api#serverrouteoptions).
+| Option    | Type   | Default         | Description                    |
+|-----------|--------|-----------------|--------------------------------|
+| `cwd`     | string | `process.cwd()` | Directory to scan for files    |
+| `pattern` | string | `'*.js'`        | Glob pattern to match files    |
 
-```javascript
-exports.customers = {
+## File Conventions
+
+Filenames are converted to **camelCase** and used as the namespace key when registering with the server.
+
+### Methods (`lib/methods/namespace_a.js`)
+
+Each export becomes a named method registered under `server.methods.<camelCaseFilename>.<exportName>`.
+
+```js
+// lib/methods/math_utils.js
+exports.multiply = {
+  name: 'multiply',
+  method: (a, b) => a * b,
+  options: { cache: { expiresIn: 60000 } }
+};
+
+exports.add = {
+  name: 'add',
+  method: (a, b) => a + b,
+  options: {}
+};
+
+// Registered as:
+// server.methods.mathUtils.multiply(3, 4) // => 12
+// server.methods.mathUtils.add(1, 2)      // => 3
+```
+
+### Routes (`lib/routes/api.js`)
+
+Each export should contain a `routes` array of standard hapi route objects.
+
+```js
+// lib/routes/health.js
+exports.status = {
   routes: [
-    {method: 'GET', path: '/customers', handler: {customerAll: {}}},
-    {method: 'POST', path: '/customers', handler: {customerCreate: {}}}
-  ]
-}
-
-exports.update = {
-  routes: {
-    method: 'PATCH',
-    path: '/customers/{id}',
-    handler: {
-      customerUpdate: {}
+    {
+      method: 'GET',
+      path: '/status',
+      handler: async (request, h) => h.response({ ok: true })
     }
-  }
-}
+  ]
+};
 ```
 
-#### Function Signature
-`method: function`: required for this signature should receive a server object.
+### Handlers (`lib/handlers/upload.js`)
 
-`options: object`: optional options to be passed a long with server object.
+Each export is a named handler function registered via `server.decorate('handler', ...)`.
 
-```javascript
-exports.customers = {
-  method: (server, options) => {
-    console.log(options);
+```js
+// lib/handlers/file_upload.js
+exports.upload = function (route, options) {
+  return async (request, h) => {
+    // handle file upload
+    return h.response({ uploaded: true });
+  };
+};
 
-    server.route([
-      {method: 'GET', path: '/customers', handler: {customerAll: {}}},
-      {method: 'POST', path: '/customers', handler: {customerCreate: {}}}
-    ])
-  }
-}
+// Use in routes:
+// handler: { upload: { dest: '/tmp' } }
 ```
 
-### Register decorators.
+### Decorators (`lib/decorators/utils.js`)
 
-`decorate: string`: required and accept only `request|toolkit|server`.
+Each export configures a server, request, or toolkit decoration.
 
-`name: string`: optional name must be unique since will be used as accessor
-from decoration, if name is not passed `exports.key` will be used instead.
-
-`method: any`: required could be anything from `object|array|function|string` is what you'll get from decoration.
-
-see more info about [decorators](https://hapijs.com/api#serverdecoratetype-property-method-options)
-
-````javascript
-exports.reply404 = {
-  decorate: 'toolkit',
-  method: () => {
-    return this.response({
-      message: 'Standard 404 error'
-    });
+```js
+// lib/decorators/helpers.js
+exports.formatDate = {
+  decorate: 'server',    // 'server' | 'request' | 'toolkit'
+  name: 'formatDate',
+  method: function (date) {
+    return new Date(date).toISOString();
   }
 };
 
-// will be accesible from a handler like:
+// Registered as: server.formatDate(new Date())
+```
 
-...
-handler: (request, h) => {
-  return h.response(({anotherMessage: 'ahh whatever really.'}).code(404);
-}
+## License
 
-````
+ISC © [Angel Ramirez](https://github.com/ar4mirez)
